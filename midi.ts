@@ -5,7 +5,7 @@ namespace midi {
     let onNoteOffHandler: (channel: number, key: number, velocity: number) => void
     let onNoteOnHandler: (channel: number, key: number, velocity: number) => void
 
-    function init () {
+    function init() {
         if (initialized) return
         initialized = true
         serial.redirect(SerialPin.P0, SerialPin.P1, BaudRate.BaudRate31250)
@@ -39,8 +39,8 @@ namespace midi {
     /**
     * Registers code to run when a note off MIDI event is received.
     */
-    //% block="on note off"
-    export function onNoteOff (cb: (channel: number, key: number, velocity: number) => void) {
+    //% block="on note off" draggableParameters="reporter"
+    export function onNoteOff(cb: (channel: number, key: number, velocity: number) => void) {
         init()
         onNoteOffHandler = cb
     }
@@ -48,8 +48,8 @@ namespace midi {
     /**
     * Registers code to run when a note on MIDI event is received.
     */
-    //% block="on note on"
-    export function onNoteOn (cb: (channel: number, key: number, velocity: number) => void) {
+    //% block="on note on" draggableParameters="reporter"
+    export function onNoteOn(cb: (channel: number, key: number, velocity: number) => void) {
         init()
         onNoteOnHandler = cb
     }
