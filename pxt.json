@@ -1,0 +1,21 @@
+{
+    "name": "midi-io",
+    "version": "0.0.1",
+    "description": "A MIDI input/output controller package",
+    "license": "MIT",
+    "dependencies": {
+        "core": "*"
+    },
+    "files": [
+        "README.md",
+        "midi.ts"
+    ],
+    "testFiles": [
+        "tests.ts"
+    ],
+    "public": true,
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "tsprj"
+}
