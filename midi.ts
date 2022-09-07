@@ -1,4 +1,4 @@
-//% weight=0 icon="\uf001" color="#5ea9dd"
+//% weight=0 icon="\uf001" color="#5ea9dd" block="MIDI"
 namespace midi {
     var onNoteOff = null
     var onNoteOn = null
