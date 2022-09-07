@@ -9,12 +9,24 @@ namespace midi {
     let onProgramChangeHandler: (channel: number, program: number) => void
     let onChannelPressureHandler: (channel: number, pressure: number) => void
     let onPitchBendHandler: (channel: number, bend: number) => void
+    let onSongPositionHandler: (position: number) => void
+    let onSongSelectHandler: (song: number) => void
     let onStartHandler: () => void
     let onContinueHandler: () => void
     let onStopHandler: () => void
 
     function processSystemMessage(type: number) {
        switch (type) {
+       case 2:
+           let data = serial.readBuffer(2)
+           if (onSongPositionHandler)
+               onSongPositionHandler((data[1] << 7) | data[0])
+           break
+       case 3:
+           let data = serial.readBuffer(1)
+           if (onSongSelectHandler)
+               onSongSelectHandler(data[0])
+           break
        case 10:
            if (onStartHandler)
                onStartHandler()
@@ -152,6 +164,24 @@ namespace midi {
     export function onPitchBend(cb: (channel: number, bend: number) => void) {
         init()
         onPitchBendHandler = cb
+    }
+
+    /**
+    * Registers code to run when a song position MIDI event is received.
+    */
+    //% block="on song position"
+    export function onSongPosition(cb: () => void) {
+        init()
+        onSongPositionHandler = cb
+    }
+
+    /**
+    * Registers code to run when a song select MIDI event is received.
+    */
+    //% block="on song select"
+    export function onSongSelect(cb: () => void) {
+        init()
+        onSongSelectHandler = cb
     }
 
     /**
