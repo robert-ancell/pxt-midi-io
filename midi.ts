@@ -16,7 +16,7 @@ namespace midi {
            /// Commands have first bit set, skip other values
            let command = data[0]
            if ((command & 0b10000000) == 0) return
-           let type = (command & 0x0b01110000) >> 4
+           let type = (command & 0b01110000) >> 4
            let channel = command & 0b00001111
 
            switch (type) {
