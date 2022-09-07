@@ -6,6 +6,54 @@ namespace midi {
     let onNoteOnHandler: (channel: number, key: number, velocity: number) => void
     let onChannelPressureHandler: (channel: number, pressure: number) => void
     let onPitchBendHandler: (channel: number, bend: number) => void
+    let onStartHandler: () => void
+    let onContinueHandler: () => void
+    let onStopHandler: () => void
+
+    function processSystemMessage(type: number) {
+       switch (type) {
+       case 10:
+           if (onStartHandler)
+               onStartHandler()
+           break
+       case 11:
+           if (onContinueHandler)
+               onContinueHandler()
+           break
+       case 12:
+           if (onStopHandler)
+               onStopHandler()
+           break
+        }
+    }
+
+    function processMessage(type: number, channel: number) {
+       switch (type) {
+       case 0:
+           data = serial.readBuffer(2)
+           if (onNoteOffHandler)
+               onNoteOffHandler(channel, data[0], data[1])
+           break
+       case 1:
+           data = serial.readBuffer(2)
+           if (onNoteOnHandler)
+               onNoteOnHandler(channel, data[0], data[1])
+           break
+       case 5:
+           data = serial.readBuffer(1)
+           if (onChannelPressureHandler)
+               onChannelPressureHandler(channel, data[0])
+           break
+       case 6:
+           data = serial.readBuffer(2)
+           if (onPitchBendHandler)
+               onPitchBendHandler(channel, ((data[1] << 7) | data[0]) - 8192)
+           break
+       case 7:
+           processSystemMessage(channel);
+           break
+       }
+    }
 
     function init() {
         if (initialized) return
@@ -21,30 +69,7 @@ namespace midi {
            let type = (command & 0b01110000) >> 4
            let channel = command & 0b00001111
 
-           switch (type) {
-           case 0:
-               data = serial.readBuffer(2)
-               if (onNoteOffHandler)
-                   onNoteOffHandler(channel, data[0], data[1])
-               break
-           case 1:
-               data = serial.readBuffer(2)
-               if (onNoteOnHandler)
-                   onNoteOnHandler(channel, data[0], data[1])
-               break
-           case 5:
-               data = serial.readBuffer(1)
-               if (onChannelPressureHandler)
-                   onChannelPressureHandler(channel, data[0])
-               break
-           case 6:
-               data = serial.readBuffer(2)
-               if (onPitchBendHandler)
-                   onPitchBendHandler(channel, ((data[1] << 7) | data[0]) - 8192)
-               break
-           default:
-               return
-           }
+           processMessage(type, channel);
         })
     }
 
@@ -82,5 +107,32 @@ namespace midi {
     export function onPitchBend(cb: (channel: number, bend: number) => void) {
         init()
         onPitchBendHandler = cb
+    }
+
+    /**
+    * Registers code to run when a start MIDI event is received.
+    */
+    //% block="on start"
+    export function onStart(cb: () => void) {
+        init()
+        onStartHandler = cb
+    }
+
+    /**
+    * Registers code to run when a continue MIDI event is received.
+    */
+    //% block="on continue"
+    export function onContinue(cb: () => void) {
+        init()
+        onContinueHandler = cb
+    }
+
+    /**
+    * Registers code to run when a stop MIDI event is received.
+    */
+    //% block="on stop"
+    export function onStop(cb: () => void) {
+        init()
+        onStopHandler = cb
     }
 }
