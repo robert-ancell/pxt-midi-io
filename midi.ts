@@ -5,6 +5,7 @@ namespace midi {
     let onNoteOffHandler: (channel: number, key: number, velocity: number) => void
     let onNoteOnHandler: (channel: number, key: number, velocity: number) => void
     let onPolyphonicPressureHandler: (channel: number, key: number, pressure: number) => void
+    let onControlChangeHandler: (channel: number, controller: number, value: number) => void
     let onProgramChangeHandler: (channel: number, program: number) => void
     let onChannelPressureHandler: (channel: number, pressure: number) => void
     let onPitchBendHandler: (channel: number, bend: number) => void
@@ -45,6 +46,11 @@ namespace midi {
            data = serial.readBuffer(2)
            if (onPolyphonicPressureHandler)
                onPolyphonicPressureHandler(channel, data[0], data[1])
+           break
+       case 3:
+           data = serial.readBuffer(2)
+           if (onControlChageHandler)
+               onControlChageHandler(channel, data[0], data[1])
            break
        case 4:
            data = serial.readBuffer(1)
@@ -110,6 +116,15 @@ namespace midi {
     export function onPolyphonicPressure(cb: (channel: number, key: number, pressure: number) => void) {
         init()
         onPolyphonicPressureHandler = cb
+    }
+
+    /**
+    * Registers code to run when a control change MIDI event is received.
+    */
+    //% block="on control change" draggableParameters="reporter"
+    export function onControlChange(cb: (channel: number, controller: number, value: number) => void) {
+        init()
+        onControlChangeHandler = cb
     }
 
     /**
