@@ -4,6 +4,7 @@ namespace midi {
 
     let onNoteOffHandler: (channel: number, key: number, velocity: number) => void
     let onNoteOnHandler: (channel: number, key: number, velocity: number) => void
+    let onPitchBendHandler: (channel: number, bend: number) => void
 
     function init() {
         if (initialized) return
@@ -30,6 +31,11 @@ namespace midi {
                if (onNoteOnHandler)
                    onNoteOnHandler(channel, data[0], data[1])
                break
+           case 6:
+               data = serial.readBuffer(2)
+               if (onPitchBendHandler)
+                   onPitchBendHandler(channel, ((data[1] << 7) | data[0]) - 8192)
+               break
            default:
                return
            }
@@ -52,5 +58,14 @@ namespace midi {
     export function onNoteOn(cb: (channel: number, key: number, velocity: number) => void) {
         init()
         onNoteOnHandler = cb
+    }
+
+    /**
+    * Registers code to run when a pitch bend MIDI event is received.
+    */
+    //% block="on pitch bend" draggableParameters="reporter"
+    export function onPitchBend(cb: (channel: number, bend: number) => void) {
+        init()
+        onPitchBendHandler = cb
     }
 }
