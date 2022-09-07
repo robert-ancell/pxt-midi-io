@@ -108,7 +108,7 @@ namespace midi {
     /**
     * Registers code to run when a note off MIDI event is received.
     */
-    //% block="on note off" draggableParameters="reporter"
+    //% block="on MIDI note off" draggableParameters="reporter"
     export function onNoteOff(cb: (channel: number, key: number, velocity: number) => void) {
         init()
         onNoteOffHandler = cb
@@ -117,7 +117,7 @@ namespace midi {
     /**
     * Registers code to run when a note on MIDI event is received.
     */
-    //% block="on note on" draggableParameters="reporter"
+    //% block="on MIDI note on" draggableParameters="reporter"
     export function onNoteOn(cb: (channel: number, key: number, velocity: number) => void) {
         init()
         onNoteOnHandler = cb
@@ -126,7 +126,7 @@ namespace midi {
     /**
     * Registers code to run when a polyphonic pressure MIDI event is received.
     */
-    //% block="on polyphonic pressure" draggableParameters="reporter"
+    //% block="on MIDI polyphonic pressure" draggableParameters="reporter"
     export function onPolyphonicPressure(cb: (channel: number, key: number, pressure: number) => void) {
         init()
         onPolyphonicPressureHandler = cb
@@ -135,7 +135,7 @@ namespace midi {
     /**
     * Registers code to run when a control change MIDI event is received.
     */
-    //% block="on control change" draggableParameters="reporter"
+    //% block="on MIDI control change" draggableParameters="reporter"
     export function onControlChange(cb: (channel: number, controller: number, value: number) => void) {
         init()
         onControlChangeHandler = cb
@@ -144,7 +144,7 @@ namespace midi {
     /**
     * Registers code to run when a program change MIDI event is received.
     */
-    //% block="on program change" draggableParameters="reporter"
+    //% block="on MIDI program change" draggableParameters="reporter"
     export function onProgramChange(cb: (channel: number, program: number) => void) {
         init()
         onProgramChangeHandler = cb
@@ -153,7 +153,7 @@ namespace midi {
     /**
     * Registers code to run when a channel pressure MIDI event is received.
     */
-    //% block="on channel pressure" draggableParameters="reporter"
+    //% block="on MIDI channel pressure" draggableParameters="reporter"
     export function onChannelPressure(cb: (channel: number, pressure: number) => void) {
         init()
         onChannelPressureHandler = cb
@@ -162,7 +162,7 @@ namespace midi {
     /**
     * Registers code to run when a pitch bend MIDI event is received.
     */
-    //% block="on pitch bend" draggableParameters="reporter"
+    //% block="on MIDI pitch bend" draggableParameters="reporter"
     export function onPitchBend(cb: (channel: number, bend: number) => void) {
         init()
         onPitchBendHandler = cb
@@ -171,7 +171,7 @@ namespace midi {
     /**
     * Registers code to run when a song position MIDI event is received.
     */
-    //% block="on song position"
+    //% block="on MIDI song position"
     export function onSongPosition(cb: () => void) {
         init()
         onSongPositionHandler = cb
@@ -180,7 +180,7 @@ namespace midi {
     /**
     * Registers code to run when a song select MIDI event is received.
     */
-    //% block="on song select"
+    //% block="on MIDI song select"
     export function onSongSelect(cb: () => void) {
         init()
         onSongSelectHandler = cb
@@ -189,7 +189,7 @@ namespace midi {
     /**
     * Registers code to run when a start MIDI event is received.
     */
-    //% block="on start"
+    //% block="on MIDI start"
     export function onStart(cb: () => void) {
         init()
         onStartHandler = cb
@@ -198,7 +198,7 @@ namespace midi {
     /**
     * Registers code to run when a continue MIDI event is received.
     */
-    //% block="on continue"
+    //% block="on MIDI continue"
     export function onContinue(cb: () => void) {
         init()
         onContinueHandler = cb
@@ -207,7 +207,7 @@ namespace midi {
     /**
     * Registers code to run when a stop MIDI event is received.
     */
-    //% block="on stop"
+    //% block="on MIDI stop"
     export function onStop(cb: () => void) {
         init()
         onStopHandler = cb
