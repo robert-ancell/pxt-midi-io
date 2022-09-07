@@ -90,7 +90,7 @@ namespace midi {
     function init() {
         if (initialized) return
         initialized = true
-        serial.redirect(SerialPin.P0, SerialPin.P1, BaudRate.BaudRate31250)
+        serial.redirect(SerialPin.P12, SerialPin.P13, BaudRate.BaudRate31250)
         basic.forever (function () {
            let data = serial.readBuffer(1)
            if (data.length == 0) return
