@@ -17,17 +17,67 @@ namespace midi {
     let onContinueHandler: () => void
     let onStopHandler: () => void
 
+    function processNoteOff(channel: number) {
+       let data = serial.readBuffer(2)
+       if (onNoteOffHandler)
+           onNoteOffHandler(channel, data[0], data[1])
+    }
+
+    function processNoteOn(channel: number) {
+       let data = serial.readBuffer(2)
+       if (onNoteOnHandler)
+           onNoteOnHandler(channel, data[0], data[1])
+    }
+
+    function processPolyphonicPressure(channel: number) {
+       let data = serial.readBuffer(2)
+       if (onPolyphonicPressureHandler)
+           onPolyphonicPressureHandler(channel, data[0], data[1])
+    }
+
+    function processControlChange(channel: number) {
+       let data = serial.readBuffer(2)
+       if (onControlChangeHandler)
+           onControlChangeHandler(channel, data[0], data[1])
+    }
+
+    function processProgramChange(channel: number) {
+       let data = serial.readBuffer(1)
+       if (onProgramChangeHandler)
+           onProgramChangeHandler(channel, data[0])
+    }
+
+    function processChannelPressure(channel: number) {
+       let data = serial.readBuffer(1)
+       if (onChannelPressureHandler)
+           onChannelPressureHandler(channel, data[0])
+    }
+
+    function processPitchBend(channel: number) {
+       let data = serial.readBuffer(2)
+       if (onPitchBendHandler)
+           onPitchBendHandler(channel, ((data[1] << 7) | data[0]) - 8192)
+    }
+
+    function processSongPosition() {
+       let data = serial.readBuffer(2)
+       if (onSongPositionHandler)
+           onSongPositionHandler((data[1] << 7) | data[0])
+    }
+
+    function processSongSelect() {
+       let data = serial.readBuffer(1)
+       if (onSongSelectHandler)
+           onSongSelectHandler(data[0])
+    }
+
     function processSystemMessage(type: number) {
        switch (type) {
        case 2:
-           let data = serial.readBuffer(2)
-           if (onSongPositionHandler)
-               onSongPositionHandler((data[1] << 7) | data[0])
+           processSongPosition()
            break
        case 3:
-           let data = serial.readBuffer(1)
-           if (onSongSelectHandler)
-               onSongSelectHandler(data[0])
+           processSongSelect()
            break
        case 10:
            if (onStartHandler)
@@ -47,39 +97,25 @@ namespace midi {
     function processMessage(type: number, channel: number) {
        switch (type) {
        case 0:
-           data = serial.readBuffer(2)
-           if (onNoteOffHandler)
-               onNoteOffHandler(channel, data[0], data[1])
+           processNoteOff(channel)
            break
        case 1:
-           data = serial.readBuffer(2)
-           if (onNoteOnHandler)
-               onNoteOnHandler(channel, data[0], data[1])
+           processNoteOn(channel)
            break
        case 2:
-           data = serial.readBuffer(2)
-           if (onPolyphonicPressureHandler)
-               onPolyphonicPressureHandler(channel, data[0], data[1])
+           processPolyphonicPressure(channel)
            break
        case 3:
-           data = serial.readBuffer(2)
-           if (onControlChageHandler)
-               onControlChageHandler(channel, data[0], data[1])
+           processControlChange(channel)
            break
        case 4:
-           data = serial.readBuffer(1)
-           if (onProgramChangeHandler)
-               onProgramChangeHandler(channel, data[0])
+           processProgramChange(channel)
            break
        case 5:
-           data = serial.readBuffer(1)
-           if (onChannelPressureHandler)
-               onChannelPressureHandler(channel, data[0])
+           processChannelPressureHandler(channel)
            break
        case 6:
-           data = serial.readBuffer(2)
-           if (onPitchBendHandler)
-               onPitchBendHandler(channel, ((data[1] << 7) | data[0]) - 8192)
+           processPitchBend(channel)
            break
        case 7:
            processSystemMessage(channel);
