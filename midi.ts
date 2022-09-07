@@ -112,7 +112,7 @@ namespace midi {
            processProgramChange(channel)
            break
        case 5:
-           processChannelPressureHandler(channel)
+           processChannelPressure(channel)
            break
        case 6:
            processPitchBend(channel)
