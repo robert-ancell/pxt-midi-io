@@ -1,3 +1,5 @@
+// See https://learn.sparkfun.com/tutorials/midi-tutorial for information on MIDI
+
 //% weight=0 icon="\uf001" color="#5ea9dd" block="MIDI"
 namespace midi {
     let initialized = false
