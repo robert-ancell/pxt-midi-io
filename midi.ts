@@ -172,7 +172,7 @@ namespace midi {
     * Registers code to run when a song position MIDI event is received.
     */
     //% block="on MIDI song position"
-    export function onSongPosition(cb: () => void) {
+    export function onSongPosition(cb: (position: number) => void) {
         init()
         onSongPositionHandler = cb
     }
@@ -181,7 +181,7 @@ namespace midi {
     * Registers code to run when a song select MIDI event is received.
     */
     //% block="on MIDI song select"
-    export function onSongSelect(cb: () => void) {
+    export function onSongSelect(cb: (song: number) => void) {
         init()
         onSongSelectHandler = cb
     }
