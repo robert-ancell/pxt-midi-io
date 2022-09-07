@@ -4,6 +4,7 @@ namespace midi {
 
     let onNoteOffHandler: (channel: number, key: number, velocity: number) => void
     let onNoteOnHandler: (channel: number, key: number, velocity: number) => void
+    let onProgramChangeHandler: (channel: number, program: number) => void
     let onChannelPressureHandler: (channel: number, pressure: number) => void
     let onPitchBendHandler: (channel: number, bend: number) => void
     let onStartHandler: () => void
@@ -38,6 +39,11 @@ namespace midi {
            data = serial.readBuffer(2)
            if (onNoteOnHandler)
                onNoteOnHandler(channel, data[0], data[1])
+           break
+       case 4:
+           data = serial.readBuffer(1)
+           if (onProgramChangeHandler)
+               onProgramChangeHandler(channel, data[0])
            break
        case 5:
            data = serial.readBuffer(1)
@@ -92,10 +98,19 @@ namespace midi {
     }
 
     /**
+    * Registers code to run when a program change MIDI event is received.
+    */
+    //% block="on program change" draggableParameters="reporter"
+    export function onProgramChange(cb: (channel: number, program: number) => void) {
+        init()
+        onProgramChangeHandler = cb
+    }
+
+    /**
     * Registers code to run when a channel pressure MIDI event is received.
     */
     //% block="on channel pressure" draggableParameters="reporter"
-    export function onChannelPressure(cb: (channel: number, bend: number) => void) {
+    export function onChannelPressure(cb: (channel: number, pressure: number) => void) {
         init()
         onChannelPressureHandler = cb
     }
