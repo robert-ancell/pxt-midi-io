@@ -4,6 +4,7 @@ namespace midi {
 
     let onNoteOffHandler: (channel: number, key: number, velocity: number) => void
     let onNoteOnHandler: (channel: number, key: number, velocity: number) => void
+    let onPolyphonicPressureHandler: (channel: number, key: number, pressure: number) => void
     let onProgramChangeHandler: (channel: number, program: number) => void
     let onChannelPressureHandler: (channel: number, pressure: number) => void
     let onPitchBendHandler: (channel: number, bend: number) => void
@@ -39,6 +40,11 @@ namespace midi {
            data = serial.readBuffer(2)
            if (onNoteOnHandler)
                onNoteOnHandler(channel, data[0], data[1])
+           break
+       case 2:
+           data = serial.readBuffer(2)
+           if (onPolyphonicPressureHandler)
+               onPolyphonicPressureHandler(channel, data[0], data[1])
            break
        case 4:
            data = serial.readBuffer(1)
@@ -95,6 +101,15 @@ namespace midi {
     export function onNoteOn(cb: (channel: number, key: number, velocity: number) => void) {
         init()
         onNoteOnHandler = cb
+    }
+
+    /**
+    * Registers code to run when a polyphonic pressure MIDI event is received.
+    */
+    //% block="on polyphonic pressure" draggableParameters="reporter"
+    export function onPolyphonicPressure(cb: (channel: number, key: number, pressure: number) => void) {
+        init()
+        onPolyphonicPressureHandler = cb
     }
 
     /**
